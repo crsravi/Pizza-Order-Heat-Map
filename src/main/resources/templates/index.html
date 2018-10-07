@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<body>
+
+<div ng-app="myApp">
+
+    <div ng-controller="myCtrl">
+        <form name='TestForm' ng-submit='addUser()'>
+            <div control-group='TestForm.usercolor'>
+                <label for='genMap'>Order Status:</label>
+                <select name='genMap' ng-model='selectedStatus' ng-options='x for x in statuses'>
+                    <option value="">Select an Order Status</option>
+                </select>
+                <button type="button" class="btn btn-primary" ng-click="GenerateHeatMap()">Generate Heat-Map</button>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Region Name</th>
+                        <th>Latitutude</th>
+                        <th>Longitude</th>
+                        <th>Radius</th>
+                        <th>Number Of Orders</th>
+                        <th>Order Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="heatMap in heatMapList">
+                        <th>{{heatMap.regionName}}</th>
+                        <th>{{heatMap.latitutude}}</th>
+                        <th>{{heatMap.longitude}}</th>
+                        <th>{{heatMap.radius}}</th>
+                        <th>{{heatMap.numberOfOrders}}</th>
+                        <th>{{heatMap.orderStatus}}</th>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+</body>
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope,$http,$window) {
+        $scope.statuses = ["In Progress", "Complete"];
+        $scope.GenerateHeatMap = function(){
+            console.log($scope.selectedStatus);
+            $http.get('http://localhost:8091/heat-map/'+$scope.selectedStatus).
+            then(function(response) {
+                $scope.heatMapList = response.data;
+            },function(err){
+                console.log(err);
+                $window.alert(err.data.error + ':' +err.data.message);
+            });
+        }
+    });
+</script>
+</html>
