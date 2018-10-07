@@ -9,8 +9,8 @@
 <div ng-app="myApp">
 
     <div ng-controller="myCtrl">
-        <form name='TestForm' ng-submit='addUser()'>
-            <div control-group='TestForm.usercolor'>
+        <form name='TestForm'>
+            <div>
                 <label for='genMap'>Order Status:</label>
                 <select name='genMap' ng-model='selectedStatus' ng-options='x for x in statuses'>
                     <option value="">Select an Order Status</option>
